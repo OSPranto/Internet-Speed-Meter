@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>যোগাযোগ | OSPranto Tech</title>
+
+    <link rel="icon" href="logo.png" type="image/png">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         /* Dark Mode (GitHub থিম) এর সাথে মানানসই কাস্টম CSS */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #0d1117; /* Index.html এর ব্যাকগ্রাউন্ড */
+            background-color: #0d1117; 
             color: #c9d1d9;
             min-height: 100vh;
             padding: 40px 20px;
@@ -28,6 +31,19 @@
         .header {
             text-align: center;
             margin-bottom: 40px;
+        }
+
+        /* লোগো স্টাইল */
+        .logo {
+            margin-bottom: 15px;
+        }
+        
+        .logo img {
+            width: 80px; 
+            height: 80px;
+            border-radius: 50%; 
+            border: 3px solid #58a6ff;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
         }
 
         .header h1 {
@@ -56,7 +72,7 @@
         }
 
         .card {
-            background-color: #161b22; /* কার্ডের ব্যাকগ্রাউন্ড */
+            background-color: #161b22; 
             padding: 30px;
             border-radius: 12px;
             border: 1px solid #30363d;
@@ -85,7 +101,7 @@
         .form-group input, .form-group textarea {
             width: 100%;
             padding: 10px;
-            background-color: #21262d; /* ইনপুট ফিল্ডের ব্যাকগ্রাউন্ড */
+            background-color: #21262d; 
             border: 1px solid #30363d;
             color: #c9d1d9;
             border-radius: 6px;
@@ -154,11 +170,10 @@
             margin: 0;
         }
 
-        /* আইকনের রঙের জন্য গ্রেডিয়েন্টগুলি এখানে দরকার নেই, সলিড রঙ ব্যবহার করা হলো */
-        .bg-red { background-color: #f85149; } /* Email */
-        .bg-blue-sky { background-color: #0088cc; } /* Telegram */
-        .bg-blue-dark { background-color: #1877f2; } /* Facebook */
-        .bg-gray-dark { background-color: #30363d; } /* GitHub */
+        .bg-red { background-color: #f85149; } 
+        .bg-blue-sky { background-color: #0088cc; } 
+        .bg-blue-dark { background-color: #1877f2; } 
+        .bg-gray-dark { background-color: #30363d; } 
 
         /* ফুটার */
         .footer {
@@ -188,6 +203,10 @@
 
     <div class="container">
         <div class="header">
+            <div class="logo">
+                <img src="logo.png" alt="OSPranto Tech Logo">
+            </div>
+            
             <h1>যোগাযোগ করুন (Contact Us)</h1>
             <p>ডেভেলপার: **OSPranto Tech**</p>
         </div>
@@ -279,7 +298,6 @@
 
             window.location.href = mailtoLink;
 
-            // ফর্মে থাকা টেক্সট ক্লিয়ার করে দেওয়া
             this.reset();
         });
     </script>
