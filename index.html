@@ -6,10 +6,10 @@
     <title>নেট স্পিড মিটার | OSPranto Tech</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS স্টাইল */
+        /* CSS স্টাইল - শুধুমাত্র একটি নতুন বাটন যোগ করা হয়েছে */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #0d1117; /* GitHub dark mode color */
+            background-color: #0d1117; 
             color: #c9d1d9;
             display: flex;
             flex-direction: column;
@@ -22,7 +22,7 @@
         }
 
         .container {
-            background-color: #161b22; /* Slightly lighter dark background */
+            background-color: #161b22; 
             padding: 40px 30px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -32,7 +32,7 @@
         }
 
         .branding {
-            color: #58a6ff; /* A vibrant blue for branding */
+            color: #58a6ff; 
             margin-bottom: 5px;
             font-size: 1.8em;
             font-weight: 700;
@@ -44,7 +44,6 @@
             margin-bottom: 25px;
         }
 
-        /* স্পিড ডিসপ্লে এরিয়া */
         .result-area {
             margin: 30px 0;
             padding: 15px 0;
@@ -55,7 +54,7 @@
         .speed-display {
             font-size: 2.5em;
             font-weight: 700;
-            color: #2ea043; /* Green for speed result */
+            color: #2ea043; 
             line-height: 1.1;
         }
 
@@ -65,7 +64,7 @@
             color: #8b949e;
         }
 
-        #speed-unit {
+        #unit-mbps {
             font-size: 0.4em;
             display: block;
             color: #c9d1d9;
@@ -84,6 +83,7 @@
             font-weight: 600;
             transition: background-color 0.3s, transform 0.1s;
             width: 100%;
+            margin-bottom: 20px; /* নিচের কন্টাক্ট বাটনের জন্য একটু স্পেস */
         }
 
         #start-button:hover {
@@ -98,40 +98,29 @@
             background-color: #30363d;
             cursor: not-allowed;
         }
+        
+        /* নতুন কন্টাক্ট বাটন স্টাইল */
+        .contact-link {
+            display: block;
+            text-decoration: none;
+            color: #58a6ff; 
+            font-weight: 600;
+            padding: 10px 0;
+            border: 1px solid #58a6ff;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .contact-link:hover {
+            background-color: #58a6ff1a; /* হালকা নীল ব্যাকগ্রাউন্ড */
+        }
 
         .status-message {
             margin-top: 20px;
-            min-height: 20px; /* Space for message */
+            min-height: 20px;
             font-size: 0.9em;
             color: #8b949e;
-        }
-
-        /* Contact Section Styling */
-        .contact-section {
-            background-color: #161b22;
-            padding: 20px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .contact-section h2 {
-            color: #58a6ff;
-            margin-top: 0;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        .contact-section p {
-            margin: 5px 0;
-            font-size: 0.9em;
-        }
-
-        .contact-section p strong {
-            color: #c9d1d9;
         }
     </style>
 </head>
@@ -144,7 +133,7 @@
         <div class="result-area">
             <div class="speed-display">
                 <span id="speed-mbps">0.00</span>
-                <span id="unit-mbps">Mbps</span>
+                <span id="unit-mbps">Mbps (ISP Speed)</span>
             </div>
             
             <div class="secondary-display">
@@ -155,16 +144,10 @@
         </div>
 
         <button id="start-button">টেস্ট শুরু করুন</button>
+        
+        <a href="contact.html" class="contact-link">যোগাযোগ করুন (Contact Us)</a>
 
         <p id="status-message" class="status-message">উপরে আপনার সংযোগের বর্তমান গতি দেখতে পাবেন।</p>
-    </div>
-
-    <div class="contact-section">
-        <h2>যোগাযোগ (Contact)</h2>
-        <p>🌐 Github: **OSPranto Tech**</p>
-        <p>📧 Email: **OSPranto.Official@gmail.com**</p>
-        <p>📘 Facebook: **Adnan Hasan Pranto**</p>
-        <p>💬 Telegram: **@MrMysteryMoon**</p>
     </div>
 
     <script>
@@ -174,14 +157,10 @@
             const speedMbpsCapDisplay = document.getElementById('speed-mbps-cap');
             const statusMessage = document.getElementById('status-message');
 
-            // গ্লোবাল ইন্টারনেট স্পিড পরিমাপের জন্য পাবলিক CDN URL ব্যবহার করা হলো।
-            // ফাইলের সাইজ (5 MB) = 5,242,880 Bytes
             const testFileUrl = 'https://speed.cloudflare.com/__down?bytes=5242880'; 
             const fileSizeInBytes = 5242880; 
 
-            // স্পিড পরিমাপের ফাংশন
             async function measureSpeed() {
-                // UI আপডেট (টেস্ট শুরু)
                 startButton.disabled = true;
                 startButton.textContent = 'পরীক্ষা চলছে...';
                 speedMbpsDisplay.textContent = '...';
@@ -190,55 +169,36 @@
                 speedMbpsDisplay.style.color = '#8b949e'; 
 
                 try {
-                    // ১. সময় পরিমাপ শুরু (Start Time)
                     const startTime = new Date().getTime();
-
-                    // ২. ফাইল ডাউনলোড
                     const response = await fetch(testFileUrl, { cache: 'no-store' });
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                     
                     const blob = await response.blob(); 
-                    
-                    // ৩. সময় পরিমাপ শেষ (End Time)
                     const endTime = new Date().getTime();
-
-                    // সময় ব্যবধান (মিলিসেকেন্ডে)
                     const durationInSeconds = (endTime - startTime) / 1000;
-
-                    // স্পিড ক্যালকুলেশন
-                    // A. Bytes/sec
                     const speedInBytesPerSecond = fileSizeInBytes / durationInSeconds;
-
-                    // B. ISP স্পিড (Mbps) = (Bytes/sec * 8) / (1024 * 1024)
                     const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
-                    
-                    // C. প্রকৃত ডাউনলোড স্পিড (MBps) = (Bytes/sec) / (1024 * 1024) 
-                    // অথবা, সহজভাবে: Mbps / 8
                     const speedInMegaBytesPerSecond = speedInMbps / 8; 
 
-                    // ৪. ফলাফল ডিসপ্লে
                     speedMbpsDisplay.textContent = speedInMbps.toFixed(2);
                     speedMbpsCapDisplay.textContent = speedInMegaBytesPerSecond.toFixed(2);
                     
-                    speedMbpsDisplay.style.color = '#2ea043'; // সফল ফলাফলে সবুজ রঙ
-                    statusMessage.textContent = `ডাউনলোড সময়: ${durationInSeconds.toFixed(2)} সেকেন্ড।`;
+                    speedMbpsDisplay.style.color = '#2ea043'; 
+                    statusMessage.textContent = `ডাউনলোড সময়: ${durationInSeconds.toFixed(2)} সেকেন্ড। টেস্ট সম্পন্ন।`;
 
                 } catch (error) {
                     console.error("স্পিড পরিমাপে ত্রুটি:", error);
                     speedMbpsDisplay.textContent = 'ত্রুটি!';
                     speedMbpsCapDisplay.textContent = 'ত্রুটি!';
-                    speedMbpsDisplay.style.color = '#f85149'; // ত্রুটিতে লাল রঙ
+                    speedMbpsDisplay.style.color = '#f85149'; 
                     statusMessage.textContent = 'স্পিড টেস্ট করা যায়নি। ইন্টারনেট সংযোগ নিশ্চিত করুন।';
                 } finally {
-                    // ৫. UI রিস্টোর
                     startButton.disabled = false;
                     startButton.textContent = 'আবার চেষ্টা করুন';
                 }
             }
-
-            // বাটন ক্লিক ইভেন্ট লিসেনার
             startButton.addEventListener('click', measureSpeed);
         });
     </script>
