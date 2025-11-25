@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>নেট স্পিড মিটার | OSPranto Tech</title>
+    
+    <link rel="icon" href="logo.png" type="image/png">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* CSS স্টাইল - Dark Mode (GitHub থিম) */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #0d1117; /* GitHub dark mode color */
+            background-color: #0d1117; 
             color: #c9d1d9;
             display: flex;
             flex-direction: column;
@@ -22,7 +25,7 @@
         }
 
         .container {
-            background-color: #161b22; /* Slightly lighter dark background */
+            background-color: #161b22; 
             padding: 40px 30px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -30,9 +33,22 @@
             max-width: 400px;
             margin-bottom: 30px;
         }
+        
+        /* লোগো স্টাইল */
+        .logo {
+            margin-bottom: 15px;
+        }
+        
+        .logo img {
+            width: 80px; 
+            height: 80px;
+            border-radius: 50%; 
+            border: 3px solid #58a6ff;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+        }
 
         .branding {
-            color: #58a6ff; /* A vibrant blue for branding */
+            color: #58a6ff; 
             margin-bottom: 5px;
             font-size: 1.8em;
             font-weight: 700;
@@ -99,7 +115,6 @@
             cursor: not-allowed;
         }
         
-        /* Contact Link Style */
         .contact-link {
             display: block;
             text-decoration: none;
@@ -127,6 +142,10 @@
 <body>
 
     <div class="container">
+        <div class="logo">
+            <img src="logo.png" alt="OSPranto Tech Logo">
+        </div>
+        
         <h1 class="branding">ইন্টারনেট স্পিড মিটার</h1>
         <p class="subtitle">Powered by **OSPranto Tech**</p>
 
