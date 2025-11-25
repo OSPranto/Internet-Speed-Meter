@@ -222,15 +222,19 @@
             const speedMbpsCapDisplay = document.getElementById('speed-mbps-cap');
             const statusMessage = document.getElementById('status-message');
 
-            // কনফিগারেশন: নির্ভরযোগ্য পাবলিক ডোমেইন থেকে বড় বাইট ফাইল (5MB)
-            const downloadTestUrl = 'https://ipv4.download.thinkbroadband.com/5MB.zip'; 
-            const downloadSizeInBytes = 5 * 1024 * 1024; // 5MB
-            const uploadSizeInBytes = 1 * 1024 * 1024; // 1MB আপলোডের জন্য
-            const uploadTestUrl = 'https://speed.cloudflare.com/__up'; // আপলোডের জন্য ক্লাউডফ্লেয়ারের URL 
+            // কনফিগারেশন
+            // ডাউনলোড টেস্টের জন্য একটি ভিন্ন, CORS-বান্ধব সার্ভার URL
+            const downloadTestUrl = 'https://testfiles.site/10mb/file'; 
+            const downloadSizeInBytes = 10 * 1024 * 1024; // 10MB
+            
+            // আপলোড টেস্টের জন্য একটি ছোট ডেটা সেট
+            const uploadSizeInBytes = 1 * 1024 * 1024; // 1MB 
+            const uploadTestUrl = 'https://speed.cloudflare.com/__up'; 
 
             // স্পিড অনুযায়ী রঙ সেট করা
             function setSpeedColor(displayElement, speedInMbps) {
                 let color, shadow;
+                // স্পিডের ভিত্তিতে রঙের লজিক
                 if (speedInMbps < 5) {
                     color = '#f85149'; // লাল (ধীর)
                     shadow = '0 0 5px rgba(248, 81, 73, 0.5)';
@@ -243,12 +247,13 @@
                 }
                 displayElement.style.color = color;
                 displayElement.style.textShadow = shadow;
+                displayElement.classList.remove('error-color');
             }
             
             // আপলোড ডেটা তৈরি করা (র্যান্ডম বাইট)
             function generateUploadData(size) {
                 const arr = new Uint8Array(size);
-                // র্যান্ডম ডেটা তৈরি করা হচ্ছে
+                // র্যান্ডম ডেটা তৈরি করা
                 for (let i = 0; i < size; i++) {
                     arr[i] = Math.floor(Math.random() * 256);
                 }
@@ -266,19 +271,20 @@
                 // Fetch API ব্যবহার করে আপলোড টেস্ট
                 const response = await fetch(uploadTestUrl, {
                     method: 'POST',
-                    mode: 'cors', // CORS ব্যবহার করে অন্য ডোমেইনে পোস্ট করা
+                    mode: 'cors', 
                     body: uploadData,
                     cache: 'no-store'
                 });
 
                 if (!response.ok) {
-                    // CORS বা সার্ভার ত্রুটি হলে এখানে ধরা পড়বে
                     throw new Error(`Upload failed with status: ${response.status}`);
                 }
                 
                 const endTime = new Date().getTime();
                 const durationInSeconds = (endTime - startTime) / 1000;
                 
+                if (durationInSeconds === 0) throw new Error("Zero duration for upload.");
+
                 const speedInBytesPerSecond = uploadSizeInBytes / durationInSeconds;
                 const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
 
@@ -305,6 +311,8 @@
                 
                 const endTime = new Date().getTime();
                 const durationInSeconds = (endTime - startTime) / 1000;
+
+                if (durationInSeconds === 0) throw new Error("Zero duration for download.");
                 
                 const speedInBytesPerSecond = downloadSizeInBytes / durationInSeconds;
                 const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
@@ -353,7 +361,7 @@
                     downSpeedDisplay.classList.add('error-color');
                     upSpeedDisplay.classList.add('error-color');
                     
-                    statusMessage.textContent = 'স্পিড টেস্ট করা যায়নি। ইন্টারনেট সংযোগ বা সার্ভার নিশ্চিত করুন।';
+                    statusMessage.textContent = 'স্পিড টেস্ট করা যায়নি। ইন্টারনেট সংযোগ বা সার্ভার নিশ্চিত করুন। (Error: ' + error.message + ')';
                 } finally {
                     startButton.disabled = false;
                     startButton.textContent = 'আবার চেষ্টা করুন';
