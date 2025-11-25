@@ -60,7 +60,7 @@
             margin-bottom: 25px;
         }
 
-        /* ⭐ উন্নত স্পিড মিটার ডিসপ্লে স্টাইল ⭐ */
+        /* ⭐ স্পিড মিটার ডিসপ্লে স্টাইল ⭐ */
         .result-area {
             margin: 30px 0;
             padding: 20px;
@@ -101,7 +101,6 @@
             padding-top: 10px;
         }
         
-        /* ইউনিট এবং সেকেন্ডারি ডিসপ্লে স্টাইল ঠিক করা হলো */
         #unit-mbps-down, #unit-mbps-up {
             font-size: 0.45em; 
             display: block;
@@ -169,6 +168,11 @@
             font-size: 0.9em;
             color: #8b949e;
         }
+        /* ত্রুটি দেখানোর জন্য লাল রং */
+        .error-color {
+            color: #f85149 !important;
+            text-shadow: 0 0 5px rgba(248, 81, 73, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -184,14 +188,14 @@
         <div class="result-area">
             <div class="download-speed">
                 <div class="speed-display">
-                    <span id="speed-mbps-down">0.00</span>
+                    <span id="speed-mbps-down" class="error-color">0.00</span>
                     <span id="unit-mbps-down">ডাউনলোড স্পিড (Mbps)</span>
                 </div>
             </div>
 
             <div class="upload-speed">
                 <div class="speed-display">
-                    <span id="speed-mbps-up">0.00</span>
+                    <span id="speed-mbps-up" class="error-color">0.00</span>
                     <span id="unit-mbps-up">আপলোড স্পিড (Mbps)</span>
                 </div>
             </div>
@@ -218,13 +222,13 @@
             const speedMbpsCapDisplay = document.getElementById('speed-mbps-cap');
             const statusMessage = document.getElementById('status-message');
 
-            // কনফিগারেশন
-            const downloadTestUrl = 'https://speed.cloudflare.com/__down?bytes=10485760'; // 10MB ফাইল
-            const uploadTestUrl = 'https://speed.cloudflare.com/__up'; 
-            const downloadSizeInBytes = 10485760; 
-            const uploadSizeInBytes = 5242880; // 5MB ডেটা আপলোড করা হবে
-            
-            // স্পিড অনুযায়ী রঙ সেট করা
+            // কনফিগারেশন: নির্ভরযোগ্য পাবলিক ডোমেইন থেকে বড় বাইট ফাইল (5MB)
+            const downloadTestUrl = 'https://ipv4.download.thinkbroadband.com/5MB.zip'; 
+            const downloadSizeInBytes = 5 * 1024 * 1024; // 5MB
+            const uploadSizeInBytes = 1 * 1024 * 1024; // 1MB আপলোডের জন্য
+            const uploadTestUrl = 'https://speed.cloudflare.com/__up'; // আপলোডের জন্য ক্লাউডফ্লেয়ারের URL 
+
+            // স্পিড অনুযায়ী রঙ সেট করা
             function setSpeedColor(displayElement, speedInMbps) {
                 let color, shadow;
                 if (speedInMbps < 5) {
@@ -244,6 +248,7 @@
             // আপলোড ডেটা তৈরি করা (র্যান্ডম বাইট)
             function generateUploadData(size) {
                 const arr = new Uint8Array(size);
+                // র্যান্ডম ডেটা তৈরি করা হচ্ছে
                 for (let i = 0; i < size; i++) {
                     arr[i] = Math.floor(Math.random() * 256);
                 }
@@ -253,26 +258,27 @@
             // ⭐ আপলোড স্পিড পরিমাপের ফাংশন ⭐
             async function measureUploadSpeed() {
                 statusMessage.textContent = 'আপলোড পরীক্ষা চলছে...';
-                downSpeedDisplay.textContent = '...';
-                upSpeedDisplay.textContent = '...';
                 
                 const uploadData = generateUploadData(uploadSizeInBytes);
                 
                 const startTime = new Date().getTime();
+                
+                // Fetch API ব্যবহার করে আপলোড টেস্ট
                 const response = await fetch(uploadTestUrl, {
                     method: 'POST',
+                    mode: 'cors', // CORS ব্যবহার করে অন্য ডোমেইনে পোস্ট করা
                     body: uploadData,
                     cache: 'no-store'
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Upload HTTP error! Status: ${response.status}`);
+                    // CORS বা সার্ভার ত্রুটি হলে এখানে ধরা পড়বে
+                    throw new Error(`Upload failed with status: ${response.status}`);
                 }
                 
                 const endTime = new Date().getTime();
                 const durationInSeconds = (endTime - startTime) / 1000;
                 
-                // ডেটার আকার (বাইট) ব্যবহার করা হলো, বডিতে থাকা ডেটার আকার
                 const speedInBytesPerSecond = uploadSizeInBytes / durationInSeconds;
                 const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
 
@@ -285,31 +291,22 @@
             // ⭐ ডাউনলোড স্পিড পরিমাপের ফাংশন ⭐
             async function measureDownloadSpeed() {
                 statusMessage.textContent = 'ডাউনলোড পরীক্ষা চলছে...';
-                downSpeedDisplay.textContent = '...';
                 
                 const startTime = new Date().getTime();
+                // Fetch API ব্যবহার করে ডাউনলোড টেস্ট
                 const response = await fetch(downloadTestUrl, { cache: 'no-store' });
                 
                 if (!response.ok) {
-                    throw new Error(`Download HTTP error! Status: ${response.status}`);
+                    throw new Error(`Download failed with status: ${response.status}`);
                 }
                 
-                // response.blob() ব্যবহার না করে stream ব্যবহার করা হলো, যা বড় ফাইলের জন্য আরও বাস্তবসম্মত
-                const reader = response.body.getReader();
-                let receivedLength = 0;
-                
-                while(true) {
-                    const { done, value } = await reader.read();
-                    if (done) {
-                        break;
-                    }
-                    receivedLength += value.length;
-                }
+                // সমস্ত ডেটা লোড হওয়ার অপেক্ষা 
+                const blob = await response.blob();
                 
                 const endTime = new Date().getTime();
                 const durationInSeconds = (endTime - startTime) / 1000;
                 
-                const speedInBytesPerSecond = receivedLength / durationInSeconds;
+                const speedInBytesPerSecond = downloadSizeInBytes / durationInSeconds;
                 const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
                 const speedInMegaBytesPerSecond = speedInMbps / 8; 
 
@@ -322,27 +319,40 @@
 
 
             async function measureSpeed() {
+                // ডিসপ্লে রিসেট ও বাটন ডিজেবল
                 startButton.disabled = true;
                 startButton.textContent = 'পরীক্ষা চলছে... দয়া করে অপেক্ষা করুন।';
                 
+                downSpeedDisplay.textContent = '...';
+                upSpeedDisplay.textContent = '...';
+                speedMbpsCapDisplay.textContent = '...';
+
+                // রঙ রিসেট করা
+                downSpeedDisplay.style.color = '#8b949e'; 
+                upSpeedDisplay.style.color = '#8b949e';
+                downSpeedDisplay.style.textShadow = 'none';
+                upSpeedDisplay.style.textShadow = 'none';
+                
                 try {
-                    // প্রথমে ডাউনলোড টেস্ট
+                    // 1. ডাউনলোড টেস্ট
                     const downloadSpeed = await measureDownloadSpeed();
                     
-                    // তারপর আপলোড টেস্ট
+                    // 2. আপলোড টেস্ট
                     const uploadSpeed = await measureUploadSpeed();
                     
                     statusMessage.textContent = `টেস্ট সম্পন্ন! ডাউনলোড: ${downloadSpeed.toFixed(2)} Mbps, আপলোড: ${uploadSpeed.toFixed(2)} Mbps।`;
 
                 } catch (error) {
                     console.error("স্পিড পরিমাপে ত্রুটি:", error);
+                    
+                    // ত্রুটি হলে ডিসপ্লেতে লাল রঙ এবং 'ত্রুটি!' দেখানো
                     downSpeedDisplay.textContent = 'ত্রুটি!';
                     upSpeedDisplay.textContent = 'ত্রুটি!';
                     speedMbpsCapDisplay.textContent = 'ত্রুটি!';
                     
-                    downSpeedDisplay.style.color = '#f85149'; 
-                    upSpeedDisplay.style.color = '#f85149'; 
-
+                    downSpeedDisplay.classList.add('error-color');
+                    upSpeedDisplay.classList.add('error-color');
+                    
                     statusMessage.textContent = 'স্পিড টেস্ট করা যায়নি। ইন্টারনেট সংযোগ বা সার্ভার নিশ্চিত করুন।';
                 } finally {
                     startButton.disabled = false;
