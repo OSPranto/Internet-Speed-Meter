@@ -65,7 +65,7 @@
             color: #8b949e;
         }
 
-        #unit-mbps {
+        #speed-unit {
             font-size: 0.4em;
             display: block;
             color: #c9d1d9;
@@ -144,7 +144,7 @@
         <div class="result-area">
             <div class="speed-display">
                 <span id="speed-mbps">0.00</span>
-                <span id="unit-mbps">Mbps (ISP Speed)</span>
+                <span id="unit-mbps">Mbps</span>
             </div>
             
             <div class="secondary-display">
@@ -174,7 +174,8 @@
             const speedMbpsCapDisplay = document.getElementById('speed-mbps-cap');
             const statusMessage = document.getElementById('status-message');
 
-            // গ্লোবাল ইন্টারনেট স্পিড পরিমাপের জন্য পাবলিক CDN URL (5 MB ফাইল)
+            // গ্লোবাল ইন্টারনেট স্পিড পরিমাপের জন্য পাবলিক CDN URL ব্যবহার করা হলো।
+            // ফাইলের সাইজ (5 MB) = 5,242,880 Bytes
             const testFileUrl = 'https://speed.cloudflare.com/__down?bytes=5242880'; 
             const fileSizeInBytes = 5242880; 
 
@@ -213,7 +214,8 @@
                     // B. ISP স্পিড (Mbps) = (Bytes/sec * 8) / (1024 * 1024)
                     const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
                     
-                    // C. প্রকৃত ডাউনলোড স্পিড (MBps) = Mbps / 8
+                    // C. প্রকৃত ডাউনলোড স্পিড (MBps) = (Bytes/sec) / (1024 * 1024) 
+                    // অথবা, সহজভাবে: Mbps / 8
                     const speedInMegaBytesPerSecond = speedInMbps / 8; 
 
                     // ৪. ফলাফল ডিসপ্লে
@@ -221,7 +223,7 @@
                     speedMbpsCapDisplay.textContent = speedInMegaBytesPerSecond.toFixed(2);
                     
                     speedMbpsDisplay.style.color = '#2ea043'; // সফল ফলাফলে সবুজ রঙ
-                    statusMessage.textContent = `ডাউনলোড সময়: ${durationInSeconds.toFixed(2)} সেকেন্ড। টেস্ট সম্পন্ন।`;
+                    statusMessage.textContent = `ডাউনলোড সময়: ${durationInSeconds.toFixed(2)} সেকেন্ড।`;
 
                 } catch (error) {
                     console.error("স্পিড পরিমাপে ত্রুটি:", error);
