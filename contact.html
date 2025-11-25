@@ -1,270 +1,285 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - OSPranto Tech</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>যোগাযোগ | OSPranto Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
-        * { font-family: 'Space Grotesk', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-        .no-radius { border-radius: 0 !important; }
-        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        .sidebar { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .sidebar.open { transform: translateX(0); }
-        .sidebar-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        .sidebar-overlay.open { opacity: 1; pointer-events: all; }
-    </style>
-</head>
-<body class="min-h-screen">
-    <header class="glass no-radius sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-white flex items-center justify-center no-radius">
-                        <i class="ri-download-cloud-2-line text-xl text-purple-600"></i>
-                    </div>
-                    <h1 class="text-2xl font-bold text-white">TIK SAVE</h1>
-                </div>
-                <button class="md:hidden text-white text-2xl" onclick="toggleSidebar()">
-                    <i class="ri-menu-line"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <div class="sidebar-overlay fixed inset-0 bg-black/50 z-50" onclick="toggleSidebar()"></div>
-    <div class="sidebar fixed top-0 right-0 h-full w-80 bg-white z-50 no-radius">
-        <div class="p-6">
-            <div class="flex items-center justify-between mb-8">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-purple-600 flex items-center justify-center no-radius">
-                        <i class="ri-download-cloud-2-line text-xl text-white"></i>
-                    </div>
-                    <h2 class="text-xl font-bold text-gray-900">TIK SAVE</h2>
-                </div>
-                <button class="text-gray-500 text-2xl" onclick="toggleSidebar()">
-                    <i class="ri-close-line"></i>
-                </button>
-            </div>
-            <nav class="space-y-4">
-                <a href="/" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
-                    <i class="ri-home-4-line text-xl"></i><span>Home</span>
-                </a>
-                <a href="/features" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
-                    <i class="ri-star-line text-xl"></i><span>Features</span>
-                </a>
-                <a href="/about" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
-                    <i class="ri-information-line text-xl"></i><span>About</span>
-                </a>
-                <a href="/contact" class="flex items-center gap-3 p-3 text-purple-600 bg-purple-50 font-medium no-radius">
-                    <i class="ri-contacts-line text-xl"></i><span>Contact</span>
-                </a>
-            </nav>
-        </div>
-    </div>
-    
-    <section class="py-12 px-4">
-        <div class="container mx-auto max-w-4xl">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">যোগাযোগ করুন</h1>
-                <p class="text-lg text-white/80">Developer: OSPranto Tech</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                
-                <div class="glass no-radius p-8">
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">একটি বার্তা পাঠান</h2>
-                    <form id="contact-form" class="space-y-4"> 
-                        <div>
-                            <label for="name" class="block text-white text-sm font-medium mb-2">আপনার নাম</label>
-                            <input type="text" id="name" class="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-purple-400 no-radius" placeholder="আপনার নাম লিখুন" required>
-                        </div>
-                        <div>
-                            <label for="email" class="block text-white text-sm font-medium mb-2">ইমেল ঠিকানা</label>
-                            <input type="email" id="email" class="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-purple-400 no-radius" placeholder="আপনার ইমেল লিখুন" required>
-                        </div>
-                        <div>
-                            <label for="subject" class="block text-white text-sm font-medium mb-2">বিষয়</label>
-                            <input type="text" id="subject" class="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-purple-400 no-radius" placeholder="বিষয় লিখুন" required>
-                        </div>
-                        <div>
-                            <label for="message" class="block text-white text-sm font-medium mb-2">বার্তা</label>
-                            <textarea id="message" rows="5" class="w-full px-4 py-3 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-purple-400 no-radius" placeholder="আপনার বার্তা লিখুন" required></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-white font-semibold no-radius hover:from-purple-700 hover:to-pink-700 transition-all">
-                            বার্তা পাঠান
-                        </button>
-                    </form>
-                </div>
-
-                <div class="space-y-6">
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">ডেভেলপার কন্টাক্ট (OSPranto Tech)</h2>
-
-                    <a href="mailto:OSPranto.Official@gmail.com" class="glass no-radius p-6 block hover:bg-white/20 transition-all">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center no-radius">
-                                <i class="ri-mail-line text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-white">Email (Primary)</h3>
-                                <p class="text-white/70">OSPranto.Official@gmail.com</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="https://t.me/MrMysteryMoon" target="_blank" class="glass no-radius p-6 block hover:bg-white/20 transition-all">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center justify-center no-radius">
-                                <i class="ri-telegram-line text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-white">Telegram</h3>
-                                <p class="text-white/70">@MrMysteryMoon</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="https://facebook.com/AdnanHasanPranto" target="_blank" class="glass no-radius p-6 block hover:bg-white/20 transition-all">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center no-radius">
-                                <i class="ri-facebook-box-line text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-white">Facebook</h3>
-                                <p class="text-white/70">Adnan Hasan Pranto</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="https://github.com/OSPrantoTech" target="_blank" class="glass no-radius p-6 block hover:bg-white/20 transition-all">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-900 flex items-center justify-center no-radius">
-                                <i class="ri-github-line text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-white">GitHub</h3>
-                                <p class="text-white/70">OSPranto Tech</p>
-                            </div>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-
-            <div class="glass no-radius p-8 text-center">
-                <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">অতিরিক্ত সাহায্য প্রয়োজন?</h2>
-                <p class="text-white/70 mb-6">সাধারণ প্রশ্নের দ্রুত উত্তরের জন্য আমাদের FAQ সেকশনটি দেখুন (যদি থাকে) অথবা হোমে ফিরে যান।</p>
-                <a href="/" class="inline-block bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-3 text-white font-semibold no-radius hover:from-purple-700 hover:to-pink-700 transition-all">
-                    হোমে ফিরে যান
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="glass no-radius mt-12">
-        <div class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 bg-white flex items-center justify-center no-radius">
-                            <i class="ri-download-cloud-2-line text-2xl text-purple-600"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white">TIK SAVE</h3>
-                    </div>
-                    <p class="text-white/70 mb-6 max-w-md">
-                        The ultimate TikTok video downloader. Download HD videos without watermark for free. Fast, secure, and easy to use.
-                    </p>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-semibold mb-4 text-lg">Quick Links</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/" class="text-white/70 hover:text-white transition-colors">Home</a></li>
-                        <li><a href="/features" class="text-white/70 hover:text-white transition-colors">Features</a></li>
-                        <li><a href="/about" class="text-white/70 hover:text-white transition-colors">About Us</a></li>
-                        <li><a href="/contact" class="text-white/70 hover:text-white transition-colors">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-semibold mb-4 text-lg">Developer</h4>
-                    <ul class="space-y-3">
-                        <li>
-                            <a href="https://github.com/OSPrantoTech" target="_blank" class="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
-                                <i class="ri-github-fill text-xl"></i>
-                                **OSPranto Tech**
-                            </a>
-                        </li>
-                        <li>
-                            <a href="mailto:OSPranto.Official@gmail.com" class="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
-                                <i class="ri-mail-line text-xl"></i>
-                                Get in touch
-                            </a>
-                        </li>
-                        <li><a href="/terms" class="text-white/70 hover:text-white transition-colors">Terms of Service</a></li>
-                        <li><a href="/privacy" class="text-white/70 hover:text-white transition-colors">Privacy Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-white/60 text-sm mb-4 md:mb-0">
-                    © 2024 TIK SAVE. All rights reserved. Developed by **OSPranto Tech**.
-                </p>
-                <div class="flex gap-4">
-                    <a href="https://twitter.com/OSPranto" target="_blank" class="text-white/60 hover:text-white transition-colors">
-                        <i class="ri-twitter-line text-xl"></i>
-                    </a>
-                    <a href="https://facebook.com/AdnanHasanPranto" target="_blank" class="text-white/60 hover:text-white transition-colors">
-                        <i class="ri-facebook-line text-xl"></i>
-                    </a>
-                    <a href="https://instagram.com/OSPranto" target="_blank" class="text-white/60 hover:text-white transition-colors">
-                        <i class="ri-instagram-line text-xl"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Sidebar functionality (No changes needed)
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('open');
+        /* Dark Mode (GitHub থিম) এর সাথে মানানসই কাস্টম CSS */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0d1117; /* Index.html এর ব্যাকগ্রাউন্ড */
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
         }
 
-        document.querySelectorAll('.sidebar a').forEach(link => {
-            link.addEventListener('click', () => {
-                setTimeout(toggleSidebar, 100); 
-            });
-        });
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
 
-        // ⭐ Send Message (Mailto) Functionality ⭐ (Added logic)
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1em;
+            color: #8b949e;
+        }
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: #161b22; /* কার্ডের ব্যাকগ্রাউন্ড */
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card h2 {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #c9d1d9;
+            margin-bottom: 20px;
+        }
+
+        /* ফর্ম স্টাইল */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #c9d1d9;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: #21262d; /* ইনপুট ফিল্ডের ব্যাকগ্রাউন্ড */
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        .submit-button {
+            width: 100%;
+            background-color: #238636;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #2ea043;
+        }
+
+        /* কন্টাক্ট ইনফো কার্ড স্টাইল */
+        .info-link {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .info-link:hover {
+            background-color: #30363d;
+        }
+
+        .info-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
+
+        .info-content h3 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #58a6ff;
+            margin: 0;
+        }
+
+        .info-content p {
+            font-size: 0.9em;
+            color: #8b949e;
+            margin: 0;
+        }
+
+        /* আইকনের রঙের জন্য গ্রেডিয়েন্টগুলি এখানে দরকার নেই, সলিড রঙ ব্যবহার করা হলো */
+        .bg-red { background-color: #f85149; } /* Email */
+        .bg-blue-sky { background-color: #0088cc; } /* Telegram */
+        .bg-blue-dark { background-color: #1877f2; } /* Facebook */
+        .bg-gray-dark { background-color: #30363d; } /* GitHub */
+
+        /* ফুটার */
+        .footer {
+            margin-top: 40px;
+            border-top: 1px solid #30363d;
+            padding-top: 20px;
+            text-align: center;
+        }
+        
+        .back-to-home {
+            background-color: #58a6ff;
+            color: #0d1117;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        .back-to-home:hover {
+            background-color: #79b8ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>যোগাযোগ করুন (Contact Us)</h1>
+            <p>ডেভেলপার: **OSPranto Tech**</p>
+        </div>
+
+        <div class="grid-layout">
+            
+            <div class="card">
+                <h2>একটি বার্তা পাঠান</h2>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">আপনার নাম</label>
+                        <input type="text" id="name" placeholder="আপনার নাম লিখুন" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">ইমেল ঠিকানা</label>
+                        <input type="email" id="email" placeholder="আপনার ইমেল লিখুন" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">বিষয়</label>
+                        <input type="text" id="subject" placeholder="বিষয় লিখুন" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">বার্তা</label>
+                        <textarea id="message" rows="5" placeholder="আপনার বার্তা লিখুন" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">
+                        বার্তা পাঠান
+                    </button>
+                </form>
+            </div>
+
+            <div>
+                <h2>ডেভেলপার কন্টাক্ট (OSPranto Tech)</h2>
+
+                <a href="mailto:OSPranto.Official@gmail.com" class="info-link">
+                    <div class="info-icon bg-red"><i class="ri-mail-line text-xl text-white"></i></div>
+                    <div class="info-content">
+                        <h3>Email (Primary)</h3>
+                        <p>OSPranto.Official@gmail.com</p>
+                    </div>
+                </a>
+
+                <a href="https://t.me/MrMysteryMoon" target="_blank" class="info-link">
+                    <div class="info-icon bg-blue-sky"><i class="ri-telegram-line text-xl text-white"></i></div>
+                    <div class="info-content">
+                        <h3>Telegram</h3>
+                        <p>@MrMysteryMoon</p>
+                    </div>
+                </a>
+
+                <a href="https://facebook.com/AdnanHasanPranto" target="_blank" class="info-link">
+                    <div class="info-icon bg-blue-dark"><i class="ri-facebook-box-line text-xl text-white"></i></div>
+                    <div class="info-content">
+                        <h3>Facebook</h3>
+                        <p>Adnan Hasan Pranto</p>
+                    </div>
+                </a>
+
+                <a href="https://github.com/OSPrantoTech" target="_blank" class="info-link">
+                    <div class="info-icon bg-gray-dark"><i class="ri-github-line text-xl text-white"></i></div>
+                    <div class="info-content">
+                        <h3>GitHub</h3>
+                        <p>OSPranto Tech</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="index.html" class="back-to-home">
+                হোমপেজে ফিরে যান
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Send Message (Mailto) Functionality
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault(); 
 
-            // ফর্মের ফিল্ডগুলো থেকে ডেটা নেওয়া
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const subject = document.getElementById('subject').value;
             const message = document.getElementById('message').value;
 
-            // ইমেল বডির জন্য ফরম্যাটিং
             const emailBody = `Sender Name: ${name}\nSender Email: ${email}\n\nMessage:\n${message}`;
             
-            // Mailto লিংক তৈরি করা
-            // OSPranto Tech এর ইমেল
             const mailtoLink = `mailto:OSPranto.Official@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
 
-            // মেইল ক্লায়েন্ট খোলার জন্য উইন্ডো ওপেন করা
             window.location.href = mailtoLink;
 
-            // (Optional) ফর্মে থাকা টেক্সট ক্লিয়ার করে দেওয়া
+            // ফর্মে থাকা টেক্সট ক্লিয়ার করে দেওয়া
             this.reset();
         });
     </script>
