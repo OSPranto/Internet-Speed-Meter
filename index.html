@@ -60,7 +60,24 @@
             margin-bottom: 25px;
         }
 
-        /* ⭐ উন্নত স্পিড মিটার ডিসপ্লে স্টাইল ⭐ */
+        /* ⭐ ISP তথ্য ডিসপ্লে স্টাইল (আপডেট: টেক্সট সেন্টার করা হলো) ⭐ */
+        .isp-info {
+            margin-bottom: 25px;
+            padding: 10px 0;
+            font-size: 0.9em;
+            color: #8b949e;
+            border-bottom: 1px dashed #30363d;
+            **text-align: center; /* এটি সেন্টার করার জন্য যুক্ত করা হয়েছে */**
+        }
+        
+        .isp-info strong {
+            color: #c9d1d9;
+            display: block;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+        
+        /* স্পিড মিটার ডিসপ্লে স্টাইল */
         .result-area {
             margin: 30px 0;
             padding: 20px;
@@ -74,10 +91,8 @@
         .speed-display {
             font-size: 3.5em; 
             font-weight: 700;
-            color: #2ea043; 
             line-height: 1.1;
             transition: color 0.5s ease-in-out; 
-            text-shadow: 0 0 5px rgba(46, 160, 67, 0.5); 
         }
         
         .result-area::before {
@@ -92,25 +107,28 @@
             pointer-events: none; 
         }
 
+        .download-speed {
+            margin-bottom: 20px;
+        }
+        
+        #unit-mbps-down {
+            font-size: 0.45em; 
+            display: block;
+            color: #c9d1d9;
+            font-weight: 400;
+            margin-top: 10px; 
+            line-height: 1.1;
+        }
+
         .secondary-display {
-            margin-top: 20px; /* মার্জিন বাড়ানো হলো */
+            margin-top: 20px;
             font-size: 1em;
             color: #8b949e;
             padding-top: 10px;
             border-top: 1px dashed #30363d;
         }
         
-        /* ⭐⭐ এখানে পরিবর্তন করা হলো ⭐⭐ */
-        #unit-mbps {
-            font-size: 0.45em; /* ফন্ট সাইজ সামান্য বাড়ানো হলো */
-            display: block;
-            color: #c9d1d9;
-            font-weight: 400;
-            margin-top: 10px; /* ⬅️ এই মান পরিবর্তন করা হয়েছে, যাতে স্পেস তৈরি হয় */
-            line-height: 1.1;
-        }
-        /* ⭐⭐ পরিবর্তন শেষ ⭐⭐ */
-
+        /* বাটনের স্টাইল ও ত্রুটি রং */
         #start-button {
             background-color: #238636;
             color: white;
@@ -160,6 +178,11 @@
             font-size: 0.9em;
             color: #8b949e;
         }
+        
+        .error-color {
+            color: #f85149 !important;
+            text-shadow: 0 0 5px rgba(248, 81, 73, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -171,11 +194,19 @@
         
         <h1 class="branding">ইন্টারনেট স্পিড মিটার</h1>
         <p class="subtitle">Powered by **OSPranto Tech**</p>
+        
+        <div class="isp-info">
+            আপনার ISP: 
+            <strong id="isp-name">তথ্য লোড হচ্ছে...</strong>
+            <p style="margin-top: 5px;">অবস্থান: <strong id="location">...</strong></p>
+        </div>
 
         <div class="result-area">
-            <div class="speed-display">
-                <span id="speed-mbps">0.00</span>
-                <span id="unit-mbps">Mbps (ISP Speed)</span>
+            <div class="download-speed">
+                <div class="speed-display">
+                    <span id="speed-mbps-down">0.00</span>
+                    <span id="unit-mbps-down">ডাউনলোড স্পিড (Mbps)</span>
+                </div>
             </div>
             
             <div class="secondary-display">
@@ -195,65 +226,132 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const startButton = document.getElementById('start-button');
-            const speedMbpsDisplay = document.getElementById('speed-mbps');
+            const downSpeedDisplay = document.getElementById('speed-mbps-down');
             const speedMbpsCapDisplay = document.getElementById('speed-mbps-cap');
             const statusMessage = document.getElementById('status-message');
+            
+            // ISP ডিসপ্লে এলিমেন্টস (ipAddressEl রিমুভ করা হয়েছে)
+            const ispNameEl = document.getElementById('isp-name');
+            const locationEl = document.getElementById('location');
 
-            const testFileUrl = 'https://speed.cloudflare.com/__down?bytes=5242880'; 
-            const fileSizeInBytes = 5242880; 
+            // কনফিগারেশন
+            const downloadTestUrl = 'https://speed.cloudflare.com/__down?bytes=10485760'; // নির্ভরযোগ্য Cloudflare URL
+            const downloadSizeInBytes = 10 * 1024 * 1024; // 10MB
+            
+            // ISP API URL (ipwho.is API)
+            const ispApiUrl = 'https://ipwho.is/'; 
+            
+            // ⭐ ISP তথ্য লোড করার ফাংশন ⭐
+            async function fetchISPInfo() {
+                try {
+                    const response = await fetch(ispApiUrl);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // IP অ্যাড্রেস এখন আর ব্যবহার করা হচ্ছে না, তাই ipAddressEl এর প্রয়োজন নেই
+                        ispNameEl.textContent = data.connection.isp || data.connection.org || 'পাওয়া যায়নি';
+                        locationEl.textContent = `${data.city || ''}, ${data.country || ''}`;
+                        ispNameEl.style.color = "#c9d1d9"; 
+                    } else {
+                        console.error('API Error:', data.message);
+                        ispNameEl.textContent = 'ISP খুঁজে পাওয়া যায়নি';
+                        locationEl.textContent = 'ত্রুটি';
+                        ispNameEl.style.color = "#f85149";
+                    }
+                } catch (error) {
+                    console.error('Fetch Error:', error);
+                    ispNameEl.textContent = 'তথ্য লোড করা যায়নি';
+                    locationEl.textContent = 'নেটওয়ার্ক সমস্যা';
+                    ispNameEl.style.color = "#f85149"; 
+                }
+            }
+            
+            // স্পিড অনুযায়ী রঙ সেট করা
+            function setSpeedColor(displayElement, speedInMbps) {
+                let color, shadow;
+                if (speedInMbps < 5) {
+                    color = '#f85149'; 
+                    shadow = '0 0 5px rgba(248, 81, 73, 0.5)';
+                } else if (speedInMbps < 25) {
+                    color = '#ffaa1d'; 
+                    shadow = '0 0 5px rgba(255, 170, 29, 0.5)';
+                } else {
+                    color = '#2ea043'; 
+                    shadow = '0 0 5px rgba(46, 160, 67, 0.5)';
+                }
+                displayElement.style.color = color;
+                displayElement.style.textShadow = shadow;
+                displayElement.classList.remove('error-color');
+            }
+            
+            // ডাউনলোড স্পিড পরিমাপের ফাংশন
+            async function measureDownloadSpeed() {
+                statusMessage.textContent = 'ডাউনলোড পরীক্ষা চলছে...';
+                
+                const startTime = new Date().getTime();
+                const response = await fetch(downloadTestUrl, { cache: 'no-store' });
+                
+                if (!response.ok) {
+                    throw new Error(`Download failed with status: ${response.status}`);
+                }
+                
+                const blob = await response.blob();
+                
+                const endTime = new Date().getTime();
+                const durationInSeconds = (endTime - startTime) / 1000;
+
+                if (durationInSeconds === 0) throw new Error("Zero duration for download.");
+                
+                const speedInBytesPerSecond = downloadSizeInBytes / durationInSeconds;
+                const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
+                const speedInMegaBytesPerSecond = speedInMbps / 8; 
+
+                downSpeedDisplay.textContent = speedInMbps.toFixed(2);
+                speedMbpsCapDisplay.textContent = speedInMegaBytesPerSecond.toFixed(2);
+                setSpeedColor(downSpeedDisplay, speedInMbps);
+
+                return speedInMbps;
+            }
+
 
             async function measureSpeed() {
+                // ডিসপ্লে রিসেট ও বাটন ডিজেবল
                 startButton.disabled = true;
-                startButton.textContent = 'পরীক্ষা চলছে...';
-                speedMbpsDisplay.textContent = '...';
+                startButton.textContent = 'টেস্ট চলছে... দয়া করে অপেক্ষা করুন।';
+                
+                downSpeedDisplay.textContent = '...';
                 speedMbpsCapDisplay.textContent = '...';
-                statusMessage.textContent = 'গ্লোবাল সার্ভার থেকে ডাউনলোড শুরু হচ্ছে...';
-                speedMbpsDisplay.style.color = '#8b949e'; 
-                speedMbpsDisplay.style.textShadow = 'none';
 
+                // রঙ রিসেট করা
+                downSpeedDisplay.style.color = '#8b949e'; 
+                downSpeedDisplay.style.textShadow = 'none';
+                downSpeedDisplay.classList.remove('error-color');
+                
                 try {
-                    const startTime = new Date().getTime();
-                    const response = await fetch(testFileUrl, { cache: 'no-store' });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
+                    // ডাউনলোড টেস্ট
+                    const downloadSpeed = await measureDownloadSpeed();
                     
-                    const blob = await response.blob(); 
-                    const endTime = new Date().getTime();
-                    const durationInSeconds = (endTime - startTime) / 1000;
-                    const speedInBytesPerSecond = fileSizeInBytes / durationInSeconds;
-                    const speedInMbps = (speedInBytesPerSecond * 8) / (1024 * 1024);
-                    const speedInMegaBytesPerSecond = speedInMbps / 8; 
-
-                    speedMbpsDisplay.textContent = speedInMbps.toFixed(2);
-                    speedMbpsCapDisplay.textContent = speedInMegaBytesPerSecond.toFixed(2);
-                    
-                    // স্পিড অনুযায়ী ডিসপ্লে কালার পরিবর্তন 
-                    if (speedInMbps < 5) {
-                        speedMbpsDisplay.style.color = '#f85149'; // লাল (ধীর)
-                        speedMbpsDisplay.style.textShadow = '0 0 5px rgba(248, 81, 73, 0.5)';
-                    } else if (speedInMbps < 25) {
-                        speedMbpsDisplay.style.color = '#ffaa1d'; // হলুদ/কমলা (মাঝারি)
-                        speedMbpsDisplay.style.textShadow = '0 0 5px rgba(255, 170, 29, 0.5)';
-                    } else {
-                        speedMbpsDisplay.style.color = '#2ea043'; // সবুজ (দ্রুত)
-                        speedMbpsDisplay.style.textShadow = '0 0 5px rgba(46, 160, 67, 0.5)';
-                    }
-                    
-                    statusMessage.textContent = `ডাউনলোড সময়: ${durationInSeconds.toFixed(2)} সেকেন্ড। টেস্ট সম্পন্ন।`;
+                    statusMessage.textContent = `টেস্ট সম্পন্ন! ডাউনলোড: ${downloadSpeed.toFixed(2)} Mbps।`;
 
                 } catch (error) {
                     console.error("স্পিড পরিমাপে ত্রুটি:", error);
-                    speedMbpsDisplay.textContent = 'ত্রুটি!';
+                    
+                    // ত্রুটি হলে ডিসপ্লেতে লাল রঙ এবং 'ত্রুটি!' দেখানো
+                    downSpeedDisplay.textContent = 'ত্রুটি!';
                     speedMbpsCapDisplay.textContent = 'ত্রুটি!';
-                    speedMbpsDisplay.style.color = '#f85149'; 
-                    speedMbpsDisplay.style.textShadow = '0 0 5px rgba(248, 81, 73, 0.5)';
-                    statusMessage.textContent = 'স্পিড টেস্ট করা যায়নি। ইন্টারনেট সংযোগ নিশ্চিত করুন।';
+                    
+                    downSpeedDisplay.classList.add('error-color');
+                    
+                    statusMessage.textContent = 'স্পিড টেস্ট করা যায়নি। ইন্টারনেট সংযোগ বা টেস্টিং সার্ভার নিশ্চিত করুন।';
                 } finally {
                     startButton.disabled = false;
                     startButton.textContent = 'আবার চেষ্টা করুন';
                 }
             }
+            
+            // পেজ লোড হওয়ার সাথে সাথে ISP তথ্য লোড করা
+            fetchISPInfo();
+
             startButton.addEventListener('click', measureSpeed);
         });
     </script>
